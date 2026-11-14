@@ -1,0 +1,38 @@
+export type ReferencePoint = { code: string; x: number; y: number; type?: string; label?: string };
+export type ReferenceEdge = { code: string; from: string; to: string };
+export type CollectionBin = { code: string; label: string; x: number; y: number; accessNode: string; demand: number };
+export type BlockedArea = { code: string; type: "water" | "park" | "garden" | "ground" | "building"; label: string; fill: string; points: [number, number][] };
+
+const nodeRows: [string, number, number, string?, string?][] = [
+  ["N01", 645, 2895, "depot", "Truck depot"], ["N02", 774, 2895], ["N03", 774, 2436], ["N04", 975, 2436], ["N05", 975, 1950], ["N06", 459, 1950], ["N07", 459, 1248], ["N08", 912, 1248], ["N09", 912, 1515], ["N10", 1326, 1476], ["N11", 1326, 1134, "junction", "West central junction"], ["N12", 1887, 1080, "junction", "Main central junction"], ["N13", 1947, 1653], ["N14", 2316, 1620, "junction", "SCEM access"], ["N15", 2316, 1665], ["N16", 2562, 1665], ["N17", 2562, 1722], ["N18", 2838, 1692], ["N19", 2838, 1569, "junction", "East central junction"], ["N20", 3204, 1548], ["N21", 3240, 1704], ["N22", 3447, 1668], ["N23", 3519, 2196], ["N24", 3573, 2196], ["N25", 3573, 2229, "junction", "South-east junction"], ["N26", 3351, 2229], ["N27", 3435, 2919], ["N28", 3084, 2919], ["N29", 3030, 2403], ["N30", 2847, 2433], ["N31", 2871, 2673], ["N32", 2622, 2703], ["N33", 2622, 2796], ["N34", 2079, 2838], ["N35", 2076, 2811], ["N36", 1485, 2898], ["N37", 1467, 2631], ["N38", 1176, 2658], ["N39", 1176, 2781], ["N40", 774, 2898, "junction", "South-west junction"],
+  ["U01", 2448, 1014, "junction", "Upper central junction"], ["U02", 2448, 1182], ["U03", 3036, 1140], ["U04", 3324, 1101, "junction", "Upper east junction"], ["U05", 3324, 903], ["U06", 3438, 882], ["U07", 3354, 351, "junction", "North-east junction"], ["U08", 4011, 291], ["U09", 4092, 660], ["U10", 3888, 687], ["U11", 3954, 993], ["U12", 4176, 987], ["U13", 4332, 1536, "junction", "Far east junction"], ["U14", 4422, 2805], ["U15", 4185, 2841],
+  ["W01", 2127, 1014, "junction", "Upper west junction"], ["W02", 2127, 498], ["W03", 1830, 498], ["W04", 1467, 498], ["W05", 1467, 372], ["W06", 639, 393, "turn", "North-west endpoint"],
+];
+
+export const REFERENCE_NODES: ReferencePoint[] = nodeRows.map(([code, x, y, type, label]) => ({ code, x, y, type, label }));
+
+const edgePairs: [string, string, string][] = [
+  ["E01", "N01", "N02"], ["E02", "N02", "N03"], ["E03", "N03", "N04"], ["E04", "N04", "N05"], ["E05", "N05", "N06"], ["E06", "N06", "N07"], ["E07", "N07", "N08"], ["E08", "N08", "N09"], ["E09", "N09", "N10"], ["E10", "N10", "N11"], ["E11", "N11", "N12"], ["E12", "N12", "N13"], ["E13", "N13", "N14"], ["E14", "N14", "N15"], ["E15", "N15", "N16"], ["E16", "N16", "N17"], ["E17", "N17", "N18"], ["E18", "N18", "N19"], ["E19", "N19", "N20"], ["E20", "N20", "N21"], ["E21", "N21", "N22"], ["E22", "N22", "N23"], ["E23", "N23", "N24"], ["E24", "N24", "N25"], ["E25", "N25", "N26"], ["E26", "N26", "N27"], ["E27", "N27", "N28"], ["E28", "N28", "N29"], ["E29", "N29", "N30"], ["E30", "N30", "N31"], ["E31", "N31", "N32"], ["E32", "N32", "N33"], ["E33", "N33", "N34"], ["E34", "N34", "N35"], ["E35", "N35", "N36"], ["E36", "N36", "N37"], ["E37", "N37", "N38"], ["E38", "N38", "N39"], ["E39", "N39", "N40"], ["E40", "N40", "N01"],
+  ["E41", "N12", "U01"], ["E42", "U01", "U02"], ["E43", "U02", "U03"], ["E44", "U03", "U04"], ["E45", "U04", "U05"], ["E46", "U05", "U06"], ["E47", "U06", "U07"], ["E48", "U07", "U08"], ["E49", "U08", "U09"], ["E50", "U09", "U10"], ["E51", "U10", "U11"], ["E52", "U11", "U12"], ["E53", "U12", "U13"], ["E54", "U13", "U14"], ["E55", "U14", "U15"], ["E56", "U15", "N27"], ["E57", "N12", "W01"], ["E58", "W01", "W02"], ["E59", "W02", "W03"], ["E60", "W03", "W04"], ["E61", "W04", "W05"], ["E62", "W05", "W06"],
+];
+export const REFERENCE_EDGES: ReferenceEdge[] = edgePairs.map(([code, from, to]) => ({ code, from, to }));
+
+const binRows: [string, number, number, string, number][] = [
+  ["BIN-01", 570, 285, "W06", 2], ["BIN-02", 1464, 213, "W05", 5], ["BIN-03", 1908, 417, "W03", 3], ["BIN-04", 2517, 333, "U01", 4], ["BIN-05", 3114, 279, "U07", 2], ["BIN-06", 3801, 210, "U08", 5], ["BIN-07", 3894, 579, "U09", 3], ["BIN-08", 3330, 648, "U06", 4], ["BIN-09", 4095, 900, "U11", 6], ["BIN-10", 4332, 1443, "U13", 5], ["BIN-11", 3027, 1032, "U03", 2], ["BIN-12", 2172, 918, "W01", 4], ["BIN-13", 1623, 1014, "N12", 3], ["BIN-14", 1299, 1113, "N11", 5], ["BIN-15", 498, 1140, "N07", 2], ["BIN-16", 2829, 1458, "N19", 4], ["BIN-17", 3411, 1566, "N22", 3], ["BIN-18", 3567, 2064, "N23", 6], ["BIN-19", 4407, 2091, "U14", 4], ["BIN-20", 561, 1860, "N06", 3], ["BIN-21", 1020, 2250, "N04", 5], ["BIN-22", 1341, 2538, "N38", 2], ["BIN-23", 1983, 2688, "N34", 4], ["BIN-24", 3009, 2820, "N28", 3], ["BIN-25", 4188, 2697, "U15", 6],
+];
+export const COLLECTION_BINS: CollectionBin[] = binRows.map(([code, x, y, accessNode, demand]) => ({ code, label: `Garbage collection point ${code.slice(-2)}`, x, y, accessNode, demand }));
+
+export const REFERENCE_LANDMARKS = [
+  { code: "SCEM-HQ", label: "SCEM (Smart City Emergency System)", x: 2208, y: 1446, accessNode: "N14", color: "#7424a8" },
+  { code: "TRUCK-DEPOT", label: "Garbage truck depot", x: 645, y: 2757, accessNode: "N01", color: "#15558c" },
+];
+
+const park = (code: string, type: BlockedArea["type"], label: string, points: [number, number][]) => ({ code, type, label, fill: "#80ca46", points });
+const building = (code: string, label: string, points: [number, number][]) => ({ code, type: "building" as const, label, fill: "#aeb3ba", points });
+export const BLOCKED_AREAS: BlockedArea[] = [
+  { code: "WATER-01", type: "water", label: "West river", fill: "#58afe2", points: [[0, 0], [570, 0], [330, 450], [240, 1260], [300, 2130], [0, 2250]] },
+  park("PARK-01", "park", "North-west river park", [[300, 0], [780, 0], [750, 750], [270, 1200], [240, 420]]), park("PARK-02", "garden", "North central gardens", [[1980, 0], [2350, 0], [2400, 900], [2030, 930]]), park("PARK-03", "park", "Central west park", [[1320, 1080], [1900, 1050], [1980, 1710], [1370, 1710]]), park("PARK-04", "park", "North-east park", [[3450, 810], [4210, 810], [4270, 1710], [3500, 1680]]), park("PARK-05", "ground", "South-west ground", [[1440, 1900], [2390, 1850], [2440, 2600], [1470, 2650]]), park("PARK-06", "garden", "South central garden", [[2350, 1880], [2890, 1860], [2920, 2680], [2450, 2700]]), park("PARK-07", "park", "South-east park", [[3300, 2200], [4100, 2160], [4120, 2860], [3380, 2870]]),
+  building("BLDG-01", "North-west building", [[810, 0], [1160, 0], [1170, 190], [820, 190]]), building("BLDG-02", "North building A", [[2650, 0], [3000, 0], [3000, 300], [2660, 300]]), building("BLDG-03", "North building B", [[4050, 0], [4530, 0], [4490, 300], [4090, 250]]), building("BLDG-04", "West building", [[480, 1280], [900, 1280], [900, 1850], [500, 1850]]), building("BLDG-05", "Central building A", [[1950, 1660], [2300, 1660], [2300, 1950], [1970, 1950]]), building("BLDG-06", "Central building B", [[2880, 1710], [3300, 1700], [3310, 2100], [2940, 2100]]), building("BLDG-07", "East building", [[4200, 1680], [4590, 1680], [4590, 2160], [4240, 2160]]), building("BLDG-08", "South-west building", [[1140, 2630], [1490, 2610], [1490, 3060], [1150, 3060]]), building("BLDG-09", "South central building", [[2670, 2700], [3020, 2680], [3040, 3060], [2690, 3060]]), building("BLDG-10", "South-east building", [[4200, 2850], [4560, 2820], [4590, 3072], [4210, 3072]]),
+];
+
+export function referenceNode(code: string) { return REFERENCE_NODES.find((node) => node.code === code)!; }
